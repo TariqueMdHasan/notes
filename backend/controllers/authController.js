@@ -10,18 +10,21 @@ const registerUser = async(req, res) => {
     // check if email exist
     // check if username exist
     // save and return json
+    // pw regex imp
     try{
-        const {userName, email, password} = req.body
+        const {username, email, password, name} = req.body
 
-        if(!userName){
+        if(!username){
             return res.status(400).json({message: "Please Enter username!"})
         }else if(!email){
             return res.status(400).json({message: "Please enter email!"})
         }else if(!password){
             return res.status(400).json({message: "Please enter password!"})
         }
+        else if(!name){
+            return res.status(400).json({message: "Please enter name!"})
+        }
 
-        // password regex checks
         if (password) {
             if (password.length <= 6) {
                 return res.status(400).json({
@@ -62,7 +65,7 @@ const registerUser = async(req, res) => {
 
 
         const existEmail = await User.findOne({email})
-        const existUserName = await User.findOne({userName})
+        const existUserName = await User.findOne({username})
         if(existEmail){
             return res.status(400).json({message: "This email already in use!"})
         }else if(existUserName){
@@ -70,13 +73,13 @@ const registerUser = async(req, res) => {
         }
 
     
-        const user = await User.create({userName, email, password})
+        const user = await User.create({username, email, password, name})
         const token = generateToken(user._id)
         sendTokenCookie(res, token)
         return res.status(200).json({
             message: 'user created successfully',
             user: {
-                username: user.userName,
+                username: user.username,
                 email: user.email,
                 Id: user._id,
                 name: user.name
@@ -106,48 +109,12 @@ const loginUser = async(req, res) => {
             return res.status(400).json({message: "Please fill the passowrd"})
         }
 
-        if (password) {
-            if (password.length <= 6) {
-                return res.status(400).json({
-                message: "Password must be greater than 6"
-                });
-            }
-
-            if (password.length >= 20) {
-                return res.status(400).json({
-                message: "Password must be smaller than 20"
-                });
-            }
-
-            if (!/[a-z]/.test(password)) {
-                return res.status(400).json({
-                message: "Password must contain at least one lowercase letter"
-                });
-            }
-
-            if (!/[A-Z]/.test(password)) {
-                return res.status(400).json({
-                message: "Password must contain at least one uppercase letter"
-                });
-            }
-
-            if (!/\d/.test(password)) {
-                return res.status(400).json({
-                message: "Password must contain at least one number"
-                });
-            }
-
-            if (!/[@$!%*?&#^_+\-=]/.test(password)) {
-                return res.status(400).json({
-                message: "Password must contain at least one special character"
-                });
-            }
-        }
+        
 
         const user = await User.findOne({
             $or: [
                 {email: userNameEmail.toLowerCase()},
-                {userName: userNameEmail}
+                {username: userNameEmail}
             ]
         })
         if(!user){
@@ -163,7 +130,7 @@ const loginUser = async(req, res) => {
         return res.status(200).json({
             message: "login successful",
             user: {
-                username: user.userName,
+                username: user.username,
                 email: user.email,
                 Id: user._id,
                 name: user.name
@@ -171,7 +138,7 @@ const loginUser = async(req, res) => {
         })
     }catch(error){
         console.log("login failed", error)
-        return res.json(400).json({message: "login failed"})
+        return res.status(400).json({message: "login failed"})
     }
 
 }
@@ -186,11 +153,11 @@ const updateUser = async(req, res) => {
     // update
     // return json
     try{
-        const {email, userName, name, password} = req.body
+        const {email, username, name, password} = req.body
 
 
 
-        if(!email && !userName && !name && !password){
+        if(!email && !username && !name && !password){
             return res.status(400).json({message: "Please fill atlest one field to update"})
         }
 
@@ -237,7 +204,15 @@ const updateUser = async(req, res) => {
             return res.status(400).json({message: "User not found"})
         }
 
-        if(userName) user.userName = userName
+        if (username && username !== user.username) {
+            const exists = await User.findOne({ username });
+            if (exists) {
+                return res.status(400).json({
+                    message: "Username already taken"
+                });
+            }
+        }
+        if(username) user.username = username;
         if(email) user.email = email
         if(name) user.name = name
         if(password) user.password = password
@@ -247,7 +222,7 @@ const updateUser = async(req, res) => {
             message: "user updated successfully",
             user: {
                 _id: userUpdate._id,
-                userName: userUpdate.userName,
+                username: userUpdate.username,
                 email: userUpdate.email,
                 name: userUpdate.name
             }
@@ -283,7 +258,7 @@ const deleteUser = async(req, res) => {
             return res.status(400).json({message: "Password is wrong"})
         }
 
-        await User.findByIdAndDelete(user);
+        await user.deleteOne()
         return res.status(200).json({message: 'User deleted successfully'})
     }catch(error){
         console.error('Error during user deletion', error)
@@ -302,7 +277,7 @@ const getUser = async(req, res) => {
         return res.status(200).json({
             message: "Fetched user data successfully",
             user: {
-                username: user.userName,
+                username: user.username,
                 name: user.name,
                 email: user.email,
                 id: user._id
@@ -315,6 +290,27 @@ const getUser = async(req, res) => {
     }
 }
 
+const logoutUser = async (req, res) => {
+  try {
+    res.cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    return res.status(200).json({
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error("Logout error", error);
+    return res.status(500).json({
+      message: "Logout failed",
+    });
+  }
+};
 
 
-module.exports = {registerUser, loginUser, updateUser, deleteUser, getUser }
+
+
+module.exports = {registerUser, loginUser, updateUser, deleteUser, getUser, logoutUser }

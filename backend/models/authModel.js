@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
 const userSchema = new mongoose.Schema({
-    userName: {
+    username: {
         type: String,
         unique: true,
         trim: true,
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: function(){
-            return this.userName
+            return this.username
         }
     },
     email: {

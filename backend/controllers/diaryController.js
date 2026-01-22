@@ -36,7 +36,7 @@ const writeNote = async(req, res) => {
         
 
     }catch(error){
-        console.log('not able to create blog', error)
+        console.log('not able to create note', error)
         return res.status(400).json({message: "Blog was not created, try again later"})
     }
 }
@@ -60,6 +60,12 @@ const updateNote = async(req, res) => {
         const note = await Diary.findById(noteId)
         if(!note){
             return res.status(400).json({message: "this note does not exist"})
+        }
+
+        if (note.author.toString() !== author.toString()) {
+            return res
+                .status(403)
+                .json({ message: "You cannot update this note" });
         }
 
         if(title) note.title = title
@@ -93,8 +99,8 @@ const getNote = async(req, res) => {
         }
 
         const notes = await Diary.find({author})
-        if(!notes){
-            return res.status(400).josn({message: "No notes available, Please start writing"})
+        if(notes.length === 0){
+            return res.status(400).json({message: "No notes available, Please start writing"})
         }
 
         return res.status(200).json({
@@ -149,5 +155,43 @@ const deleteNote = async(req, res) => {
 }
 
 
+const getNoteById = async (req, res) => {
+  try {
+    const author = req.user._id;
+    const noteId = req.params.id;
 
-module.exports = {writeNote, updateNote, getNote, deleteNote}
+    if (!author) {
+      return res.status(400).json({ message: "Please login" });
+    }
+
+    if (!noteId) {
+      return res.status(400).json({ message: "Note ID is required" });
+    }
+
+    const note = await Diary.findById(noteId);
+    if (!note) {
+      return res.status(400).json({ message: "Note not found" });
+    }
+
+    if (note.author.toString() !== author.toString()) {
+      return res
+        .status(400)
+        .json({ message: "You are not allowed to view this note" });
+    }
+
+    return res.status(200).json({
+      message: "Fetched note successfully",
+      note,
+    });
+  } catch (error) {
+    console.error("Error fetching note by ID:", error);
+    return res.status(500).json({
+      message: "Unable to fetch note, please try again later",
+    });
+  }
+};
+
+
+
+
+module.exports = {writeNote, updateNote, getNote, deleteNote, getNoteById}
