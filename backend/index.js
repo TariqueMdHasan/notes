@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://notes-mauve-chi.vercel.app", 
+    origin: "https://notes-mauve-chi.vercel.app",
     credentials: true,               
   })
 );
