@@ -16,7 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://notes-mauve-chi.vercel.app",
+    origin: [
+      "http://localhost:5173",
+      "https://notes-mauve-chi.vercel.app"
+    ],
     credentials: true,               
   })
 );
