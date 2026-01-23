@@ -103,14 +103,14 @@ const DiaryList = () => {
 
   return (
     <>
-      <div className="w-full lg:w-11/12 mx-auto mt-6 flex flex-col sm:flex-row gap-4">
+      <div className="w-80 lg:w-11/12 mx-auto mt-6 flex flex-col sm:flex-row gap-4">
         <input
           type="text"
           placeholder="Search diaries..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="
-            flex-1 px-4 py-2 rounded-xl
+            flex-1 px-4 py-2 rounded-xl 
             bg-white/10 backdrop-blur
             border border-white/20
             text-white placeholder-white/50
