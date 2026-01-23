@@ -39,7 +39,7 @@ const UpdateProfileForm = ({ user, onClose, onUpdated }) => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="
-          w-full max-w-md p-6 rounded-2xl
+          w-80 lg:w-full lg:max-w-md p-6 rounded-2xl
           bg-white/20 backdrop-blur-xl
           border border-white/30 text-white
         "

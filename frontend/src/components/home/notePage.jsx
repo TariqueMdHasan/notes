@@ -67,13 +67,14 @@ const NotePage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="
-          w-full max-w-3xl
+          w-80 lg:w-9/12
           bg-white/15 backdrop-blur-xl
           border border-white/25
           rounded-3xl
           p-8
           text-white
           shadow-2xl
+          h-auto
         "
       >
         <h1 className="text-3xl font-bold mb-2">{note.title}</h1>

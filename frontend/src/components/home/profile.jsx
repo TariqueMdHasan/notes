@@ -33,7 +33,7 @@ const Profile = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className={`
-                    w-full max-w-md
+                    w-80 lg:w-full lg:max-w-md
                     bg-white/20 backdrop-blur-xl
                     border border-white/30
                     rounded-3xl

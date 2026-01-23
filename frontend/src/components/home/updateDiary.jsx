@@ -17,7 +17,7 @@ const EditDiaryModal = ({ diary, onClose, onSave, loading }) => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.2 }}
         className="
-          w-full max-w-lg
+          w-80 lg:w-9/12
           bg-white/20 backdrop-blur-xl
           border border-white/30
           rounded-2xl
