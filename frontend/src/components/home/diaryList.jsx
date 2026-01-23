@@ -96,7 +96,7 @@ const DiaryList = () => {
   if (diaries.length === 0) {
     return (
       <p className="text-white/70 mt-10 text-center">
-        No diary entries yet ✍️
+        No diary entries yet 
       </p>
     );
   }
@@ -150,10 +150,10 @@ const DiaryList = () => {
         )}
       </div>
 
-      <div className="w-full lg:w-11/12 mt-10 mx-auto">
+      <div className="w-80 lg:w-9/12 mt-10 mx-auto">
         {filteredDiaries.length === 0 ? (
           <p className="text-white/70 text-center">
-            No matching diary entries ✍️
+            No matching diary entries 
           </p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
