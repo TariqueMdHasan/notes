@@ -41,13 +41,22 @@ This application allows users to securely create, read, update, and delete notes
 
 notes/
 │
-├── client/ # React frontend
+├── frontend/ # React (Vite) frontend
+│ ├── public/
+│ ├── src/
+│ ├── index.html
+│ ├── vite.config.js
+│ └── README.md
 │
-├── server/ # Node.js backend
+├── backend/ # Node.js backend
+│ ├── config/
 │ ├── controllers/
+│ ├── middlewares/
 │ ├── models/
 │ ├── routes/
-│ ├── middleware/
+│ ├── utils/
+│ ├── index.js
+│ └── package.json
 │
 └── README.md
 
