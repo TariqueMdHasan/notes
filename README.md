@@ -38,7 +38,7 @@ This application allows users to securely create, read, update, and delete notes
 
 ## Folder Structure
 
-
+```
 notes/
 │
 ├── frontend/ # React (Vite) frontend
@@ -59,7 +59,7 @@ notes/
 │ └── package.json
 │
 └── README.md
-
+```
 
 ---
 
